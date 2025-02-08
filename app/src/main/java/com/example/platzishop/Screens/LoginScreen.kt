@@ -29,23 +29,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.platzishop.R
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(NavController: NavHostController) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-
     background()
-    PaintLogin()
-
-
+    PaintLogin(NavController)
 }
 
 @Composable
-fun PaintLogin() {
+fun PaintLogin(NavController: NavHostController) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -54,7 +53,7 @@ fun PaintLogin() {
     ) {
         ImagenLogo()
         Spacer(modifier = Modifier.padding(5.dp))
-        EmailAndPassword()
+        EmailAndPassword(NavController)
     }
 }
 
@@ -65,7 +64,7 @@ fun BotonIniciarSesion() {
 
 //FUNCION QUE PINTA EL EMAIL Y CONTRASEÑA
 @Composable
-fun EmailAndPassword() {
+fun EmailAndPassword(NavController: NavHostController) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -76,7 +75,6 @@ fun EmailAndPassword() {
         onValueChange = { email = it },
         label = { Text("Email") },
         modifier = Modifier.padding(8.dp)
-
     )
     //Spacer(modifier = Modifier.padding(5.dp))
 
@@ -97,7 +95,7 @@ fun EmailAndPassword() {
             containerColor = Color.Green,
             contentColor = Color.Gray
         ),
-        onClick = { IniciarSesion(email,password) }) {
+        onClick = { IniciarSesion(email, password) }) {
         Text(
             text = "Iniciar Sesión",
             modifier = Modifier.fillMaxWidth(),
@@ -114,20 +112,23 @@ fun EmailAndPassword() {
             containerColor = Color.Green,
             contentColor = Color.Gray
         ),
-        onClick = { IniciarSesion(email,password) }) {
+        onClick = { CrearUsuario(NavController) }) {
         Text(
             text = "Crear Usuario",
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
     }
-
 }
 
+//FUNCION PARA IR A LA PANTALLA DE CREAR USUARIO
+fun CrearUsuario(NavController: NavHostController) {
+    NavController.navigate("CreateUser_Screen")
+}
+
+//FUNCION PARA INICIAR SESION
 fun IniciarSesion(email: String, password: String) {
-
 }
-
 
 //FUNCION QUE METE UNA IMAGEN DE LOGO
 @Composable
@@ -156,5 +157,6 @@ fun background() {
 @Preview(showSystemUi = true)
 @Composable
 fun preview() {
-    LoginScreen()
+    val NavController = rememberNavController()
+    LoginScreen(NavController)
 }
