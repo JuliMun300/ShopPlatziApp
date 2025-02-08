@@ -97,16 +97,34 @@ fun EmailAndPassword() {
             containerColor = Color.Green,
             contentColor = Color.Gray
         ),
-        onClick = { GuardarUsuario(email,password) }) {
+        onClick = { IniciarSesion(email,password) }) {
         Text(
             text = "Iniciar Sesión",
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
     }
+    Spacer(modifier = Modifier.padding(8.dp))
+
+    //BOTON CREAR USUARIO
+    Button(modifier = Modifier
+        .height(35.dp)
+        .width(280.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Green,
+            contentColor = Color.Gray
+        ),
+        onClick = { IniciarSesion(email,password) }) {
+        Text(
+            text = "Crear Usuario",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+    }
+
 }
 
-fun GuardarUsuario(email: String, password: String) {
+fun IniciarSesion(email: String, password: String) {
 
 }
 
