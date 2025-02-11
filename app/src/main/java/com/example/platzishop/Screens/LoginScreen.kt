@@ -2,6 +2,7 @@ package com.example.platzishop.Screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,7 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -76,7 +81,6 @@ fun EmailAndPassword(NavController: NavHostController) {
         label = { Text("Email") },
         modifier = Modifier.padding(8.dp)
     )
-    //Spacer(modifier = Modifier.padding(5.dp))
 
     //CAMPO PARA CONTRASEÑA
     OutlinedTextField(
@@ -105,20 +109,20 @@ fun EmailAndPassword(NavController: NavHostController) {
     Spacer(modifier = Modifier.padding(8.dp))
 
     //BOTON CREAR USUARIO
-    Button(modifier = Modifier
-        .height(35.dp)
-        .width(280.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Green,
-            contentColor = Color.Gray
-        ),
-        onClick = { CrearUsuario(NavController) }) {
-        Text(
-            text = "Crear Usuario",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-    }
+    Text(
+        text = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = Color.White)) {
+                append("¿No tienes una cuenta?  ")
+            }
+
+            withStyle(style = SpanStyle(color = Color.Green)) {
+                append("Registrate")
+            }
+        },
+        modifier = Modifier.clickable {
+            CrearUsuario(NavController)
+        }
+    )
 }
 
 //FUNCION PARA IR A LA PANTALLA DE CREAR USUARIO
