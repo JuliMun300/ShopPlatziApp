@@ -1,5 +1,7 @@
 package com.example.platzishop.Screens
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,24 +22,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun CreateUserLogin(NavController: NavHostController) {
 
+    val context = LocalContext.current
     background()
-    PaintCreateUser()
+    PaintCreateUser(context, NavController)
 }
 
 
 //FUNCION QUE PINTA EL EMAIL Y CONTRASEÑA Y EL NOMBRE DE USUARIO
 @Composable
-fun PaintCreateUser() {
+fun PaintCreateUser(context: Context, navController: NavHostController) {
 
     var Username by remember { mutableStateOf("") }
     var Email by remember { mutableStateOf("") }
@@ -83,13 +86,28 @@ fun PaintCreateUser() {
                 containerColor = Color.Green,
                 contentColor = Color.Gray
             ),
-            onClick = { }) {
+            onClick = { verificarDatos(Username, Email, Password, context, navController) }) {
             Text(
                 text = "Crear Usuario",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
         }
+    }
+}
+
+fun verificarDatos(
+    username: String,
+    email: String,
+    password: String,
+    context: Context,
+    navController: NavHostController
+) {
+
+    if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
+        navController.navigate("imageUser_Screen")
+    } else {
+        Toast.makeText(context, "Faltan Datos", Toast.LENGTH_SHORT).show()
     }
 }
 
