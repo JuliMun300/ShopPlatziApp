@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "958042698990",
+    "project_id": "platzishop-a143a",
+    "storage_bucket": "platzishop-a143a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958042698990:android:0885e2683f8802ac67efff",
+        "android_client_info": {
+          "package_name": "com.example.platzishop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJKikhdF2DEE4jKVkk1Yr1bZeQ03h4FWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
