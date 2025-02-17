@@ -1,5 +1,7 @@
 package com.example.platzishop.Screens
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,7 +20,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -41,15 +43,16 @@ import com.example.platzishop.R
 @Composable
 fun LoginScreen(NavController: NavHostController) {
 
+    val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     background()
-    PaintLogin(NavController)
+    PaintLogin(NavController,context)
 }
 
 @Composable
-fun PaintLogin(NavController: NavHostController) {
+fun PaintLogin(NavController: NavHostController, context: Context) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -58,7 +61,7 @@ fun PaintLogin(NavController: NavHostController) {
     ) {
         ImagenLogo()
         Spacer(modifier = Modifier.padding(5.dp))
-        EmailAndPassword(NavController)
+        EmailAndPassword(NavController,context)
     }
 }
 
@@ -69,7 +72,7 @@ fun BotonIniciarSesion() {
 
 //FUNCION QUE PINTA EL EMAIL Y CONTRASEÑA
 @Composable
-fun EmailAndPassword(NavController: NavHostController) {
+fun EmailAndPassword(NavController: NavHostController, context: Context) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -99,7 +102,7 @@ fun EmailAndPassword(NavController: NavHostController) {
             containerColor = Color.Green,
             contentColor = Color.Gray
         ),
-        onClick = { IniciarSesion(email, password) }) {
+        onClick = { IniciarSesion(email, password,context) }) {
         Text(
             text = "Iniciar Sesión",
             modifier = Modifier.fillMaxWidth(),
@@ -131,7 +134,17 @@ fun CrearUsuario(NavController: NavHostController) {
 }
 
 //FUNCION PARA INICIAR SESION
-fun IniciarSesion(email: String, password: String) {
+fun IniciarSesion(email: String, password: String, context: Context) {
+    if (email.isNotEmpty() && password.isNotEmpty()) {
+        AutenticacionLogin(email, password, context)
+        Toast.makeText(context, "Inicio correcto", Toast.LENGTH_SHORT).show()
+    }else{
+        Toast.makeText(context, "Faltan Datos", Toast.LENGTH_SHORT).show()
+    }
+}
+
+fun AutenticacionLogin(email: String, password: String, context: Context) {
+
 }
 
 //FUNCION QUE METE UNA IMAGEN DE LOGO
