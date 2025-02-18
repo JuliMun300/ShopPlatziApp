@@ -39,6 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.platzishop.R
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 @Composable
 fun LoginScreen(NavController: NavHostController) {
@@ -46,13 +49,14 @@ fun LoginScreen(NavController: NavHostController) {
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val auth = Firebase.auth
 
     background()
-    PaintLogin(NavController,context)
+    PaintLogin(NavController, context, auth)
 }
 
 @Composable
-fun PaintLogin(NavController: NavHostController, context: Context) {
+fun PaintLogin(NavController: NavHostController, context: Context, auth: FirebaseAuth) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -61,18 +65,13 @@ fun PaintLogin(NavController: NavHostController, context: Context) {
     ) {
         ImagenLogo()
         Spacer(modifier = Modifier.padding(5.dp))
-        EmailAndPassword(NavController,context)
+        EmailAndPassword(NavController, context, auth)
     }
-}
-
-@Composable
-fun BotonIniciarSesion() {
-    TODO("Not yet implemented")
 }
 
 //FUNCION QUE PINTA EL EMAIL Y CONTRASEÑA
 @Composable
-fun EmailAndPassword(NavController: NavHostController, context: Context) {
+fun EmailAndPassword(NavController: NavHostController, context: Context, auth: FirebaseAuth) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -102,7 +101,7 @@ fun EmailAndPassword(NavController: NavHostController, context: Context) {
             containerColor = Color.Green,
             contentColor = Color.Gray
         ),
-        onClick = { IniciarSesion(email, password,context) }) {
+        onClick = { IniciarSesion(email, password, context, auth) }) {
         Text(
             text = "Iniciar Sesión",
             modifier = Modifier.fillMaxWidth(),
@@ -134,17 +133,25 @@ fun CrearUsuario(NavController: NavHostController) {
 }
 
 //FUNCION PARA INICIAR SESION
-fun IniciarSesion(email: String, password: String, context: Context) {
+fun IniciarSesion(email: String, password: String, context: Context, auth: FirebaseAuth) {
     if (email.isNotEmpty() && password.isNotEmpty()) {
-        AutenticacionLogin(email, password, context)
+        AutenticacionLogin(email, password, context, auth)
         Toast.makeText(context, "Inicio correcto", Toast.LENGTH_SHORT).show()
-    }else{
+    } else {
         Toast.makeText(context, "Faltan Datos", Toast.LENGTH_SHORT).show()
     }
 }
 
-fun AutenticacionLogin(email: String, password: String, context: Context) {
+//FUNCION PARA VERIFICAR LOS DATOS A LA BASE DE DATOS DE AUTENTICACION
+fun AutenticacionLogin(email: String, password: String, context: Context, auth: FirebaseAuth) {
 
+    auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            Toast.makeText(context, "Inicio correcto", Toast.LENGTH_SHORT).show()
+        }
+    }.addOnFailureListener {
+        Toast.makeText(context, "Algo salio mal", Toast.LENGTH_SHORT).show()
+    }
 }
 
 //FUNCION QUE METE UNA IMAGEN DE LOGO
