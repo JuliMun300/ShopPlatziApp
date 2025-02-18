@@ -28,19 +28,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 @Composable
 fun CreateUserLogin(NavController: NavHostController) {
 
+    val auth = Firebase.auth
     val context = LocalContext.current
     background()
-    PaintCreateUser(context, NavController)
+    PaintCreateUser(context, NavController, auth)
 }
-
 
 //FUNCION QUE PINTA EL EMAIL Y CONTRASEÑA Y EL NOMBRE DE USUARIO
 @Composable
-fun PaintCreateUser(context: Context, navController: NavHostController) {
+fun PaintCreateUser(context: Context, navController: NavHostController, auth: FirebaseAuth) {
 
     var Username by remember { mutableStateOf("") }
     var Email by remember { mutableStateOf("") }
@@ -86,7 +89,7 @@ fun PaintCreateUser(context: Context, navController: NavHostController) {
                 containerColor = Color.Green,
                 contentColor = Color.Gray
             ),
-            onClick = { verificarDatos(Username, Email, Password, context, navController) }) {
+            onClick = { verificarDatos(Username, Email, Password, context, navController, auth) }) {
             Text(
                 text = "Crear Usuario",
                 modifier = Modifier.fillMaxWidth(),
@@ -96,18 +99,39 @@ fun PaintCreateUser(context: Context, navController: NavHostController) {
     }
 }
 
+//FUNCION PARA VERIFICAR LOS DATOS
 fun verificarDatos(
     username: String,
     email: String,
     password: String,
     context: Context,
-    navController: NavHostController
+    navController: NavHostController,
+    auth: FirebaseAuth
 ) {
 
     if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
+        AñadirAutenticacion(username, email, password, auth, context)
         navController.navigate("imageUser_Screen")
     } else {
         Toast.makeText(context, "Faltan Datos", Toast.LENGTH_SHORT).show()
+    }
+}
+
+//FUNCION PARA AÑADIR LOS DATOS A LA BASE DE DATOS DE AUTENTICACION
+fun AñadirAutenticacion(
+    username: String,
+    email: String,
+    password: String,
+    auth: FirebaseAuth,
+    context: Context
+) {
+
+    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            Toast.makeText(context, "Usuario creado correctamente", Toast.LENGTH_SHORT).show()
+        }
+    }.addOnFailureListener {
+        Toast.makeText(context, "Algo salio mal", Toast.LENGTH_SHORT).show()
     }
 }
 
