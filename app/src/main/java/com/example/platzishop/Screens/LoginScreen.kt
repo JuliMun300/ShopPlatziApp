@@ -136,7 +136,6 @@ fun CrearUsuario(NavController: NavHostController) {
 fun IniciarSesion(email: String, password: String, context: Context, auth: FirebaseAuth) {
     if (email.isNotEmpty() && password.isNotEmpty()) {
         AutenticacionLogin(email, password, context, auth)
-        Toast.makeText(context, "Inicio correcto", Toast.LENGTH_SHORT).show()
     } else {
         Toast.makeText(context, "Faltan Datos", Toast.LENGTH_SHORT).show()
     }
