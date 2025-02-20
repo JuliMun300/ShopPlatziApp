@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun CreateUserLogin(NavController: NavHostController) {
@@ -110,28 +111,81 @@ fun verificarDatos(
 ) {
 
     if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-        AñadirAutenticacion(username, email, password, auth, context)
-        navController.navigate("imageUser_Screen")
+        AñadirAlDatabase(
+            username = username,
+            email = email,
+            password = password,
+            auth = auth,
+            context = context,
+            OnSuccess = {
+                Toast.makeText(context, "usuario registrado correctamente", Toast.LENGTH_SHORT).show()
+                navController.navigate("imageUser_Screen")
+            },
+            OnFailure = {
+                Toast.makeText(context, "EL usuario no se ha registrado, vuelva a intentarlo", Toast.LENGTH_SHORT).show()
+            }
+        )
+
     } else {
         Toast.makeText(context, "Faltan Datos", Toast.LENGTH_SHORT).show()
     }
 }
 
 //FUNCION PARA AÑADIR LOS DATOS A LA BASE DE DATOS DE AUTENTICACION
-fun AñadirAutenticacion(
+fun AñadirAlDatabase(
     username: String,
     email: String,
     password: String,
     auth: FirebaseAuth,
-    context: Context
+    context: Context,
+    OnSuccess: () -> Unit,
+    OnFailure: () -> Unit
 ) {
 
     auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
         if (task.isSuccessful) {
-            Toast.makeText(context, "Usuario creado correctamente", Toast.LENGTH_SHORT).show()
+
+            val user = auth.currentUser
+            user.let {
+                if (user != null) {
+                    AñadirAFirestore(
+                        user.uid,
+                        username,
+                        email,
+                        password,
+                        context,
+                        OnSuccess,
+                        OnFailure
+                    )
+                }
+            }
         }
     }.addOnFailureListener {
         Toast.makeText(context, "Algo salio mal", Toast.LENGTH_SHORT).show()
+    }
+}
+
+//FUNCION PARA AÑADIR LOS DATOS AL FIRESTORE
+fun AñadirAFirestore(
+    uid: String,
+    username: String,
+    email: String,
+    password: String,
+    context: Context,
+    OnSuccess: () -> Unit,
+    OnFailure: () -> Unit
+) {
+    val db = Firebase.firestore
+
+    val user = hashMapOf(
+        "username" to username,
+        "email" to email,
+        "password" to password
+    )
+    db.collection("users").document(uid).set(user).addOnSuccessListener {
+        OnSuccess()
+    }.addOnFailureListener {
+        OnFailure()
     }
 }
 
