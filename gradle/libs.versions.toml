@@ -12,6 +12,9 @@ navigationCompose = "2.8.6"
 coil = "2.6.0"
 firebaseBom = "33.1.1"
 services = "4.4.2"
+okhttp = "4.9.3"
+json = "20211205"
+imagekit = "3.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,6 +36,11 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = {module = "com.google.firebase:firebase-auth-ktx" }
 firebase-firestore = {module = "com.google.firebase:firebase-firestore-ktx" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+json = { module = "org.json:json", version.ref = "json" }
+imagekit-android = { module = "com.github.imagekit-developer.imagekit-android:imagekit-android", version.ref = "imagekit" }
+okhttp3-logging = { module = "com.squareup.okhttp3:logging-interceptor", version = "4.9.3" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
