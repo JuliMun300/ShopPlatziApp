@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.platzishop.Screens.CreateUserLogin
+import com.example.platzishop.Screens.HomeScreen
 import com.example.platzishop.Screens.ImageUserScreen
 import com.example.platzishop.Screens.LoginScreen
 
@@ -20,7 +21,10 @@ fun AppNavigation() {
           CreateUserLogin(NavController)
       }
       composable(route = AppScreans.ImageUser_Screen.route){
-          ImageUserScreen()
+          ImageUserScreen(NavController)
+      }
+      composable(route = AppScreans.Home_Screen.route ){
+          HomeScreen()
       }
   }
 }
