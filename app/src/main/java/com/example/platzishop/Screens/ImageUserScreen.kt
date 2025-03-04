@@ -35,6 +35,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -51,17 +53,17 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 
 @Composable
-fun ImageUserScreen() {
+fun ImageUserScreen(NavController: NavHostController) {
 
     val auth = Firebase.auth
     val context = LocalContext.current
 
     background()
-    Imagen(context, auth)
+    Imagen(context, auth,NavController)
 }
 
 @Composable
-fun Imagen(context: Context, auth: FirebaseAuth) {
+fun Imagen(context: Context, auth: FirebaseAuth, NavController: NavHostController) {
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val launcher =
@@ -112,25 +114,33 @@ fun Imagen(context: Context, auth: FirebaseAuth) {
             contentColor = Color.Gray
         ),
             onClick = {
-                Añadir_A_DB(
-                    ImageUri = imageUri,
-                    context = context,
-                    OnSuccess = {
-                        Toast.makeText(
-                            context,
-                            "La foto de perfil se a guardado correctamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    },
-                    OnFailure = {
-                        Toast.makeText(
-                            context,
-                            "A ocurrido un error, vuelva a intentarlo",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    },
-                    auth
-                )
+                Toast.makeText(context, "Verificando imagen...", Toast.LENGTH_SHORT).show()
+                if(imageUri != null){
+                    Añadir_A_DB(
+                        ImageUri = imageUri,
+                        context = context,
+                        OnSuccess = {
+                            Toast.makeText(
+                                context,
+                                "La foto de perfil se a guardado correctamente",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            NavController.navigate("Home_Screen")
+
+                        },
+                        OnFailure = {
+                            Toast.makeText(
+                                context,
+                                "A ocurrido un error, vuelva a intentarlo",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        auth
+                    )
+                }else{
+                    Toast.makeText(context, "No has seleccionado ninguna imagen", Toast.LENGTH_SHORT).show()
+                }
+
             }) {
             Text("verificar")
         }
@@ -217,5 +227,6 @@ fun uriToBase64(context: Context, uri: Uri): String? {
 @Preview(showSystemUi = true)
 @Composable
 fun ImagePreview() {
-    ImageUserScreen()
+    val navhost = rememberNavController()
+    ImageUserScreen(navhost)
 }
